@@ -2,7 +2,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import IUser from '../interfaces/users.interface';
 import UsersModel from '../models/users.model';
 
-export default class ProductsService {
+export default class UsersService {
   public user = new UsersModel();
 
   public jwt = jsonwebtoken;
