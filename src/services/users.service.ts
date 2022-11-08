@@ -14,7 +14,9 @@ export default class UsersService {
     
     if (user.length === 0) { throw new HttpException(401, 'Username or password invalid'); }
 
-    return this.generateToken(user[0]);
+    const token = this.generateToken(user[0]);
+
+    return token;
   }
   
   public generateToken(user: IUser) {
