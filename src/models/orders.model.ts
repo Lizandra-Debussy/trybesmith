@@ -1,4 +1,4 @@
-import { RowDataPacket } from 'mysql2';
+import { RowDataPacket, ResultSetHeader } from 'mysql2';
 import IOrders from '../interfaces/orders.interface';
 
 import mysql from './connection';
@@ -19,5 +19,26 @@ export default class ProductsModel {
     );
     
     return rows;
+  }
+
+  public async create(user: { userId: number }, productsIds: number[]) {
+    const { userId } = user;
+
+    const result = await this.connection.execute <ResultSetHeader>(
+      'INSERT INTO Trybesmith.Orders (userId) VALUES (?)',
+      [userId],
+    );
+    const [dataInserted] = result;
+    const orderId = dataInserted.insertId;
+
+    const productsPromises = productsIds.map((productId) =>
+      this.connection.execute<ResultSetHeader>(
+        'UPDATE Trybesmith.Products SET orderId = ? WHERE id = ?',
+        [orderId, productId],
+      ));
+
+    await Promise.all(productsPromises);
+
+    return { userId, productsIds };
   }
 }

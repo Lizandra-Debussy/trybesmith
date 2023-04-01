@@ -8,4 +8,8 @@ export default class OrdersService {
     const orders = await this.order.getAll();
     return orders;
   }
+
+  async create(user: { userId: number }, productsIds: number[]) {
+    return this.order.create(user, productsIds);
+  }
 }
